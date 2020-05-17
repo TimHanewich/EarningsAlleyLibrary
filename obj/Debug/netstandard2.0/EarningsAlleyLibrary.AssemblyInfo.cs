@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Tim Hanewich")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Engine behind the Earnings Alley twitter account, @EarningsAlley.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("3")]
 [assembly: System.Reflection.AssemblyProductAttribute("EarningsAlley")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EarningsAlleyLibrary")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.0.0.0")]
