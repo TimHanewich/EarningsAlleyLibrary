@@ -1,0 +1,9 @@
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\bin\Debug\netstandard2.0\EarningsAlleyLibrary.deps.json
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\bin\Debug\netstandard2.0\EarningsAlleyLibrary.dll
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\bin\Debug\netstandard2.0\EarningsAlleyLibrary.pdb
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.csprojAssemblyReference.cache
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.csproj.CoreCompileInputs.cache
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.AssemblyInfoInputs.cache
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.AssemblyInfo.cs
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.dll
+C:\Users\TaHan\Downloads\EarningsAlleyLibrary\obj\Debug\netstandard2.0\EarningsAlleyLibrary.pdb
