@@ -83,7 +83,7 @@ namespace EarningsAlley
             blob.UploadText(json);
         }
     
-        public async Task<string[]> PrepareTweetsFromTranscriptAsync(Transcript trans, int include_highlight_count)
+        public async Task<string[]> PrepareTweetsFromTranscriptAsync(Transcript trans, int include_highlight_count, string in_reply_to_handle)
         {
             
 
@@ -141,8 +141,11 @@ namespace EarningsAlley
                         //Get the sentence
                         string sen = SVPs[t].Sentence;
 
+                        //Start the reply
+                        string ThisTweet = "@" + in_reply_to_handle + " ";
+
                         //write the tweet
-                        string ThisTweet = speaker.Name + ": \"" + sen + "\"";
+                        ThisTweet = ThisTweet + speaker.Name + ": \"" + sen + "\"";
 
                         //Trim it down (if it goes past 280 characters)
                         if (ThisTweet.Length > 280)
