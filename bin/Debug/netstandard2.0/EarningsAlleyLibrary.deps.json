@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "EarningsAlleyLibrary/3": {
+      "EarningsAlleyLibrary/4": {
         "dependencies": {
           "Microsoft.Azure.Storage.Blob": "11.1.5",
           "NETStandard.Library": "2.0.3",
@@ -613,7 +613,7 @@
     }
   },
   "libraries": {
-    "EarningsAlleyLibrary/3": {
+    "EarningsAlleyLibrary/4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

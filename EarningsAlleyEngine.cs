@@ -107,12 +107,12 @@ namespace EarningsAlley
             //Get company symbol
             if (trans.Title.Contains("(") && trans.Title.Contains(")"))
             {
-                int loc1 = trans.Title.IndexOf("(");
+                int loc1 = trans.Title.LastIndexOf("(");
                 int loc2 = trans.Title.IndexOf(")", loc1+1);
                 string symbol = trans.Title.Substring(loc1 + 1, loc2 - loc1 - 1);
                 Equity eq = Equity.Create(symbol);
                 await eq.DownloadSummaryAsync();
-                Tweet1Text = eq.Summary.Name + "(" + symbol.ToUpper().Trim() + ") held an earnings call on " + trans.CallDateTimeStamp.ToShortDateString() + ". Here are the highlights:";
+                Tweet1Text = eq.Summary.Name + " $" + symbol.ToUpper().Trim() + " held an earnings call on " + trans.CallDateTimeStamp.ToShortDateString() + ". Here are the highlights:";
             }
             else
             {
