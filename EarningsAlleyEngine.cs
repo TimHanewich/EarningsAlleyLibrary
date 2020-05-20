@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using TheMotleyFool.Transcripts;
 using TheMotleyFool.Transcripts.Helper;
 using Yahoo.Finance;
+using TimHanewich.Investing;
+using System.Linq;
+using System.Globalization;
 
 namespace EarningsAlley
 {
@@ -21,6 +24,7 @@ namespace EarningsAlley
         //Settings here
         private string RecentlyCompletedTranscriptUrlsBlockBlobName = "RecentlyCompletedTranscriptUrls";
 
+        
         public static EarningsAlleyEngine Create(EarningsAlleyLoginPackage login_package)
         {
             //Error checking
@@ -171,7 +175,77 @@ namespace EarningsAlley
             return ToTweet.ToArray();
         }
 
+        public async Task<string[]> PrepareTweetsForUpcomingEarningsCallsAsync(DateTime day)
+        {
+            List<string> ToReturn = new List<string>();
+           
+            //Get stocks
+            EarningsCalendarProvider ecp = new EarningsCalendarProvider();
+            string[] stocks = await ecp.GetCompaniesReportingEarningsAsync(day);
+            if (stocks.Length == 0)
+            {
+                ToReturn.Add("No earnings calls planned for " + day.ToShortDateString() + "! Until next time.");
+                return ToReturn.ToArray();
+            }
+            BatchStockDataProvider bsdp = new BatchStockDataProvider();
+            EquitySummaryData[] data = await bsdp.GetBatchEquitySummaryData(stocks);
 
+
+            //Rank by market cap
+            List<EquitySummaryData> DataAsList = data.ToList();
+            List<EquitySummaryData> Filter1 = new List<EquitySummaryData>();
+            do
+            {
+                EquitySummaryData winner = DataAsList[0];
+                foreach (EquitySummaryData esd in DataAsList)
+                {
+                    if (esd.MarketCap > winner.MarketCap)
+                    {
+                        winner = esd;
+                    }
+                }
+                Filter1.Add(winner);
+                DataAsList.Remove(winner);
+            } while (DataAsList.Count != 0);
+
+
+
+            int t = 1;
+            string CurrentTweet = "";
+
+            //First tweet
+            DateTimeFormatInfo dtfo = new DateTimeFormatInfo();
+            string monthName = dtfo.GetMonthName(day.Month);
+            CurrentTweet = "Upcoming earnings calls on " + day.DayOfWeek.ToString() + ", " + monthName + " " + day.Day.ToString() + " " + day.Year.ToString() + ":";
+            
+            //Add all
+            foreach (EquitySummaryData esd in Filter1)
+            {
+                string MyPiece = t.ToString() + ". " + "$" + esd.StockSymbol.ToUpper().Trim() + " " + esd.Name;
+
+                //Propose what it would be
+                string proposal = CurrentTweet + "\n" + MyPiece;
+
+                if (proposal.Length <=280) //If it fits, keep it in the current tweet
+                {
+                    CurrentTweet = proposal;
+                }
+                else //If it doesn't fit in the current tweet, commit that tweet to the Tweet list and start another
+                {
+                    ToReturn.Add(CurrentTweet);
+                    CurrentTweet = MyPiece;
+                }
+
+                t = t + 1;
+            }
+
+            //Add the current tweet that is being worked on to the list
+            ToReturn.Add(CurrentTweet);
+
+
+            return ToReturn.ToArray();
+
+        }
         
     }
 }
