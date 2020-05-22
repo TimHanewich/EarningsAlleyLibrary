@@ -41,12 +41,13 @@ namespace EarningsAlley
             Args.Add(TextValuePairArg.Create("surprised", 2, false));
             Args.Add(TextValuePairArg.Create("surprising", 2, false));
             Args.Add(TextValuePairArg.Create("we generated revenue", 7, false));
-            Args.Add(TextValuePairArg.Create("guidance", 6, false));
-            Args.Add(TextValuePairArg.Create("surpassed", 3, false));
-            Args.Add(TextValuePairArg.Create("top selling", 2, false));
-            Args.Add(TextValuePairArg.Create("record performance", 1, false));
-            Args.Add(TextValuePairArg.Create("revenue reached", 7, false));
-            Args.Add(TextValuePairArg.Create("historic", 2, false));
+            Args.Add(TextValuePairArg.Create("guidance", 6, true));
+            Args.Add(TextValuePairArg.Create("surpassed", 3, true));
+            Args.Add(TextValuePairArg.Create("top selling", 2, true));
+            Args.Add(TextValuePairArg.Create("record performance", 1, true));
+            Args.Add(TextValuePairArg.Create("revenue reached", 7, true));
+            Args.Add(TextValuePairArg.Create("historic", 2, true));
+            Args.Add(TextValuePairArg.Create("extraordinary", 1, true));
 
             string[] sentences = trans.GetSentences(true);
 
