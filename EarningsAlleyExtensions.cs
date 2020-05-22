@@ -15,7 +15,7 @@ namespace EarningsAlley
             Args.Add(TextValuePairArg.Create("net income", 3, true));
             Args.Add(TextValuePairArg.Create("earnings per share", 4, true));
             Args.Add(TextValuePairArg.Create("record", 2, true));
-            Args.Add(TextValuePairArg.Create("growth", 2, true));
+            Args.Add(TextValuePairArg.Create("growth", 3, true));
             Args.Add(TextValuePairArg.Create("$", 4, true));
             Args.Add(TextValuePairArg.Create("%", 5, true));
             Args.Add(TextValuePairArg.Create("revenue grew", 8, true));
@@ -29,6 +29,24 @@ namespace EarningsAlley
             Args.Add(TextValuePairArg.Create("income of", 3, true));
             Args.Add(TextValuePairArg.Create("cash flow", 5, true));
             Args.Add(TextValuePairArg.Create("earnings per share", 5, true));
+            Args.Add(TextValuePairArg.Create("net profit was", 5, true));
+            Args.Add(TextValuePairArg.Create("net loss was", 5, true));
+            Args.Add(TextValuePairArg.Create("net profit for the period was", 5, true));
+            Args.Add(TextValuePairArg.Create("net loss for the period was", 5, true));
+            Args.Add(TextValuePairArg.Create("impact", 2, true));
+            Args.Add(TextValuePairArg.Create("cash flow", 3, true));
+            Args.Add(TextValuePairArg.Create("we opened", 1, true));
+            Args.Add(TextValuePairArg.Create("per share", 3, true));
+            Args.Add(TextValuePairArg.Create("we think", 1, false));
+            Args.Add(TextValuePairArg.Create("surprised", 2, false));
+            Args.Add(TextValuePairArg.Create("surprising", 2, false));
+            Args.Add(TextValuePairArg.Create("we generated revenue", 7, false));
+            Args.Add(TextValuePairArg.Create("guidance", 6, false));
+            Args.Add(TextValuePairArg.Create("surpassed", 3, false));
+            Args.Add(TextValuePairArg.Create("top selling", 2, false));
+            Args.Add(TextValuePairArg.Create("record performance", 1, false));
+            Args.Add(TextValuePairArg.Create("revenue reached", 7, false));
+            Args.Add(TextValuePairArg.Create("historic", 2, false));
 
             string[] sentences = trans.GetSentences(true);
 
