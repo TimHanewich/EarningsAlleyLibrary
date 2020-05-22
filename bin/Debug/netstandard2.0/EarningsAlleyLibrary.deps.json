@@ -7,13 +7,14 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "EarningsAlleyLibrary/5": {
+      "EarningsAlleyLibrary/6": {
         "dependencies": {
           "Microsoft.Azure.Storage.Blob": "11.1.5",
           "NETStandard.Library": "2.0.3",
           "TheMotleyFool.Transcripts": "4.0.0",
-          "TheMotleyFool.Transcripts.Helper": "2.0.0",
+          "TheMotleyFool.Transcripts.Helper": "4.0.0",
           "TimHanewich.Investing": "3.0.0",
+          "TimHanewichToolkit": "2.0.0",
           "Yahoo.Finance": "3.0.0"
         },
         "runtime": {
@@ -93,7 +94,7 @@
           }
         }
       },
-      "TheMotleyFool.Transcripts.Helper/2.0.0": {
+      "TheMotleyFool.Transcripts.Helper/4.0.0": {
         "dependencies": {
           "TheMotleyFool.Transcripts": "4.0.0"
         },
@@ -116,17 +117,17 @@
           }
         }
       },
-      "TimHanewichToolkit/1.0.0": {
+      "TimHanewichToolkit/2.0.0": {
         "runtime": {
           "lib/netstandard2.0/TimHanewichToolkit.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
           }
         }
       },
       "Yahoo.Finance/3.0.0": {
         "dependencies": {
-          "TimHanewichToolkit": "1.0.0"
+          "TimHanewichToolkit": "2.0.0"
         },
         "runtime": {
           "lib/netstandard2.0/Yahoo.Finance.dll": {
@@ -138,7 +139,7 @@
     }
   },
   "libraries": {
-    "EarningsAlleyLibrary/5": {
+    "EarningsAlleyLibrary/6": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -213,12 +214,12 @@
       "path": "themotleyfool.transcripts/4.0.0",
       "hashPath": "themotleyfool.transcripts.4.0.0.nupkg.sha512"
     },
-    "TheMotleyFool.Transcripts.Helper/2.0.0": {
+    "TheMotleyFool.Transcripts.Helper/4.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cVWwDlNVJq8vrgFbIM21DzNrcq/3ikc7+Huox9UR2WnIUs6xJissTp3wGSn39r0+Kue5ZQljX+XyZ1Xh+Wp6WA==",
-      "path": "themotleyfool.transcripts.helper/2.0.0",
-      "hashPath": "themotleyfool.transcripts.helper.2.0.0.nupkg.sha512"
+      "sha512": "sha512-t5aFQzcbSl6hJl7KNRuHHSP9H51PYsnGGy0vxznscfKrFUd9iwQGjUDwPlhq+PxOxxVtpad4KIVqyzK99tk/fg==",
+      "path": "themotleyfool.transcripts.helper/4.0.0",
+      "hashPath": "themotleyfool.transcripts.helper.4.0.0.nupkg.sha512"
     },
     "TimHanewich.Investing/3.0.0": {
       "type": "package",
@@ -227,12 +228,12 @@
       "path": "timhanewich.investing/3.0.0",
       "hashPath": "timhanewich.investing.3.0.0.nupkg.sha512"
     },
-    "TimHanewichToolkit/1.0.0": {
+    "TimHanewichToolkit/2.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-eruT9FcyrIlmaUJjft+byVSdUBf4VSCDAsGFKLehf1fmSeBoIrQsPJjA9bCA/P7RtFEQgSlUNzqempfCCilw4Q==",
-      "path": "timhanewichtoolkit/1.0.0",
-      "hashPath": "timhanewichtoolkit.1.0.0.nupkg.sha512"
+      "sha512": "sha512-JQv5oL/bvAjLDVRzTJ0/XO+3V2hdlpTloIAnoHTSfC6t+29RZ2OHXoKChT9x1KwprMG1DWC/PSZMTVDxoJfoRw==",
+      "path": "timhanewichtoolkit/2.0.0",
+      "hashPath": "timhanewichtoolkit.2.0.0.nupkg.sha512"
     },
     "Yahoo.Finance/3.0.0": {
       "type": "package",

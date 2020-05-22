@@ -114,7 +114,7 @@
           "lib/netstandard2.0/TheMotleyFool.Transcripts.dll": {}
         }
       },
-      "TheMotleyFool.Transcripts.Helper/2.0.0": {
+      "TheMotleyFool.Transcripts.Helper/4.0.0": {
         "type": "package",
         "dependencies": {
           "TheMotleyFool.Transcripts": "3.0.0"
@@ -139,7 +139,7 @@
           "lib/netstandard2.0/TimHanewich.Investing.dll": {}
         }
       },
-      "TimHanewichToolkit/1.0.0": {
+      "TimHanewichToolkit/2.0.0": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/TimHanewichToolkit.dll": {}
@@ -572,16 +572,16 @@
         "themotleyfool.transcripts.nuspec"
       ]
     },
-    "TheMotleyFool.Transcripts.Helper/2.0.0": {
-      "sha512": "cVWwDlNVJq8vrgFbIM21DzNrcq/3ikc7+Huox9UR2WnIUs6xJissTp3wGSn39r0+Kue5ZQljX+XyZ1Xh+Wp6WA==",
+    "TheMotleyFool.Transcripts.Helper/4.0.0": {
+      "sha512": "t5aFQzcbSl6hJl7KNRuHHSP9H51PYsnGGy0vxznscfKrFUd9iwQGjUDwPlhq+PxOxxVtpad4KIVqyzK99tk/fg==",
       "type": "package",
-      "path": "themotleyfool.transcripts.helper/2.0.0",
+      "path": "themotleyfool.transcripts.helper/4.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "TMF_Logo.png",
         "lib/netstandard2.0/TheMotleyFool.Transcripts.Helper.dll",
-        "themotleyfool.transcripts.helper.2.0.0.nupkg.sha512",
+        "themotleyfool.transcripts.helper.4.0.0.nupkg.sha512",
         "themotleyfool.transcripts.helper.nuspec"
       ]
     },
@@ -598,16 +598,16 @@
         "timhanewich.investing.nuspec"
       ]
     },
-    "TimHanewichToolkit/1.0.0": {
-      "sha512": "eruT9FcyrIlmaUJjft+byVSdUBf4VSCDAsGFKLehf1fmSeBoIrQsPJjA9bCA/P7RtFEQgSlUNzqempfCCilw4Q==",
+    "TimHanewichToolkit/2.0.0": {
+      "sha512": "JQv5oL/bvAjLDVRzTJ0/XO+3V2hdlpTloIAnoHTSfC6t+29RZ2OHXoKChT9x1KwprMG1DWC/PSZMTVDxoJfoRw==",
       "type": "package",
-      "path": "timhanewichtoolkit/1.0.0",
+      "path": "timhanewichtoolkit/2.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ToolIcon.jpg",
         "lib/netstandard2.0/TimHanewichToolkit.dll",
-        "timhanewichtoolkit.1.0.0.nupkg.sha512",
+        "timhanewichtoolkit.2.0.0.nupkg.sha512",
         "timhanewichtoolkit.nuspec"
       ]
     },
@@ -630,8 +630,9 @@
       "Microsoft.Azure.Storage.Blob >= 11.1.5",
       "NETStandard.Library >= 2.0.3",
       "TheMotleyFool.Transcripts >= 4.0.0",
-      "TheMotleyFool.Transcripts.Helper >= 2.0.0",
+      "TheMotleyFool.Transcripts.Helper >= 4.0.0",
       "TimHanewich.Investing >= 3.0.0",
+      "TimHanewichToolkit >= 2.0.0",
       "Yahoo.Finance >= 3.0.0"
     ]
   },
@@ -639,7 +640,7 @@
     "C:\\Users\\TaHan\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "5.0.0",
+    "version": "6.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\TaHan\\Downloads\\EarningsAlleyLibrary\\EarningsAlleyLibrary.csproj",
       "projectName": "EarningsAlley",
@@ -688,11 +689,15 @@
           },
           "TheMotleyFool.Transcripts.Helper": {
             "target": "Package",
-            "version": "[2.0.0, )"
+            "version": "[4.0.0, )"
           },
           "TimHanewich.Investing": {
             "target": "Package",
             "version": "[3.0.0, )"
+          },
+          "TimHanewichToolkit": {
+            "target": "Package",
+            "version": "[2.0.0, )"
           },
           "Yahoo.Finance": {
             "target": "Package",

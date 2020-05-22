@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UqPi8wMkWKj5bviiICXv26jBwRNcySO0drGEyACO2I138k2WF9RowaOLjuJUbJYd2pJkjbUsMOGROWdkhM4jUw==",
+  "dgSpecHash": "OM2Vo0pHc4cUSURK4PjKOVT1pjt/Avofm7cNeGlBw8hzDBH1HE6m4V9iZSq0+vf+0mvU6QBFqey80veTMaZUew==",
   "success": true,
   "projectFilePath": "C:\\Users\\TaHan\\Downloads\\EarningsAlleyLibrary\\EarningsAlleyLibrary.csproj",
   "expectedPackageFiles": [
@@ -14,9 +14,9 @@
     "C:\\Users\\TaHan\\.nuget\\packages\\system.runtime\\4.1.0\\system.runtime.4.1.0.nupkg.sha512",
     "C:\\Users\\TaHan\\.nuget\\packages\\system.threading.tasks\\4.0.11\\system.threading.tasks.4.0.11.nupkg.sha512",
     "C:\\Users\\TaHan\\.nuget\\packages\\themotleyfool.transcripts\\4.0.0\\themotleyfool.transcripts.4.0.0.nupkg.sha512",
-    "C:\\Users\\TaHan\\.nuget\\packages\\themotleyfool.transcripts.helper\\2.0.0\\themotleyfool.transcripts.helper.2.0.0.nupkg.sha512",
+    "C:\\Users\\TaHan\\.nuget\\packages\\themotleyfool.transcripts.helper\\4.0.0\\themotleyfool.transcripts.helper.4.0.0.nupkg.sha512",
     "C:\\Users\\TaHan\\.nuget\\packages\\timhanewich.investing\\3.0.0\\timhanewich.investing.3.0.0.nupkg.sha512",
-    "C:\\Users\\TaHan\\.nuget\\packages\\timhanewichtoolkit\\1.0.0\\timhanewichtoolkit.1.0.0.nupkg.sha512",
+    "C:\\Users\\TaHan\\.nuget\\packages\\timhanewichtoolkit\\2.0.0\\timhanewichtoolkit.2.0.0.nupkg.sha512",
     "C:\\Users\\TaHan\\.nuget\\packages\\yahoo.finance\\3.0.0\\yahoo.finance.3.0.0.nupkg.sha512"
   ],
   "logs": []

@@ -10,6 +10,8 @@ using Yahoo.Finance;
 using TimHanewich.Investing;
 using System.Linq;
 using System.Globalization;
+using TimHanewichToolkit.TextAnalysis;
+using EarningsAlley;
 
 namespace EarningsAlley
 {
@@ -92,7 +94,7 @@ namespace EarningsAlley
             
 
             //Sentence Value Pairs
-            SentenceValuePair[] SVPs = null;
+            TextValuePair[] SVPs = null;
             try
             {
                 SVPs = trans.RankSentences();
@@ -140,10 +142,10 @@ namespace EarningsAlley
                     {
 
                         //Find the speaker
-                        CallParticipant speaker = trans.WhoSaid(SVPs[t].Sentence);
+                        CallParticipant speaker = trans.WhoSaid(SVPs[t].Text);
 
                         //Get the sentence
-                        string sen = SVPs[t].Sentence;
+                        string sen = SVPs[t].Text;
 
                         //write the tweet
                         string ThisTweet = speaker.Name + ": \"" + sen + "\"";
@@ -246,6 +248,7 @@ namespace EarningsAlley
             return ToReturn.ToArray();
 
         }
+        
         
     }
 }
