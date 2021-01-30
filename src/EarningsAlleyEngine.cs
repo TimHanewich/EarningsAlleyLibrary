@@ -17,6 +17,9 @@ namespace EarningsAlley
 {
     public class EarningsAlleyEngine
     {
+        //ENVIRONMENT VARIABLES HERE
+        private static string RecentlyObservedForm4FilingsFileName = "recentlyobservedform4filings";
+
         //Private resources here
         private EarningsAlleyLoginPackage LoginPackage;
         private CloudStorageAccount CSA;
@@ -26,7 +29,6 @@ namespace EarningsAlley
         //Settings here
         private string RecentlyCompletedTranscriptUrlsBlockBlobName = "RecentlyCompletedTranscriptUrls";
 
-        
         public static EarningsAlleyEngine Create(EarningsAlleyLoginPackage login_package)
         {
             //Error checking
@@ -66,6 +68,8 @@ namespace EarningsAlley
             return ToReturn;
         }
     
+        #region "Transcript summary tweeting"
+
         public List<string> DownloadRecentlyCompletedTranscriptUrls()
         {
             CloudBlockBlob blob = ContainerGeneral.GetBlockBlobReference(RecentlyCompletedTranscriptUrlsBlockBlobName);
@@ -249,6 +253,48 @@ namespace EarningsAlley
 
         }
         
+        #endregion
         
+        #region "New Form 4 alert tweeting"
+
+        public async Task<string[]> DownloadRecentlyObservedForm4FilingUrlsAsync()
+        {
+            List<string> BlankArray = new List<string>();
+
+            //If the container general does not exist, obviously neither does the file so return blank.
+            if (ContainerGeneral.Exists() == false)
+            {
+                return BlankArray.ToArray();
+            }
+
+            //Get the blob
+            CloudBlockBlob blb = ContainerGeneral.GetBlockBlobReference(RecentlyObservedForm4FilingsFileName);
+            
+            //If the blob does not exist return nothing
+            if (blb.Exists() == false)
+            {
+                return BlankArray.ToArray();
+            }
+
+            string content = await blb.DownloadTextAsync();
+            string[] ToReturn = JsonConvert.DeserializeObject<string[]>(content);
+            return ToReturn;
+        }
+
+        public async Task UploadRecentlyObservedForm4FilingUrlsAsync(string[] urls)
+        {
+            //If the container does not exit, make it
+            if (ContainerGeneral == null || ContainerGeneral.Exists() == false)
+            {
+                await ContainerGeneral.CreateIfNotExistsAsync();
+            }
+
+            //Get the blob reference
+            CloudBlockBlob blb = ContainerGeneral.GetBlockBlobReference(RecentlyCompletedTranscriptUrlsBlockBlobName);
+            await blb.UploadTextAsync(JsonConvert.SerializeObject(urls));
+        }
+
+        #endregion
+
     }
 }
