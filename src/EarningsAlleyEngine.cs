@@ -255,14 +255,12 @@ namespace EarningsAlley
         
         #region "New Form 4 alert tweeting"
 
-        public async Task<string[]> DownloadRecentlyObservedForm4FilingUrlsAsync()
+        public async Task<string> DownloadLatestObservedForm4FilingUrlAsync()
         {
-            List<string> BlankArray = new List<string>();
-
             //If the container general does not exist, obviously neither does the file so return blank.
             if (ContainerGeneral.Exists() == false)
             {
-                return BlankArray.ToArray();
+                return null;
             }
 
             //Get the blob
@@ -271,15 +269,14 @@ namespace EarningsAlley
             //If the blob does not exist return nothing
             if (blb.Exists() == false)
             {
-                return BlankArray.ToArray();
+                return null;
             }
 
             string content = await blb.DownloadTextAsync();
-            string[] ToReturn = JsonConvert.DeserializeObject<string[]>(content);
-            return ToReturn;
+            return content;
         }
 
-        public async Task UploadRecentlyObservedForm4FilingUrlsAsync(string[] urls)
+        public async Task UploadLatestObservedForm4FilingUrlAsync(string url)
         {
             //If the container does not exit, make it
             if (ContainerGeneral == null || ContainerGeneral.Exists() == false)
@@ -289,7 +286,7 @@ namespace EarningsAlley
 
             //Get the blob reference
             CloudBlockBlob blb = ContainerGeneral.GetBlockBlobReference(RecentlyObservedForm4FilingsFileName);
-            await blb.UploadTextAsync(JsonConvert.SerializeObject(urls));
+            await blb.UploadTextAsync(url);
         }
 
         #endregion
