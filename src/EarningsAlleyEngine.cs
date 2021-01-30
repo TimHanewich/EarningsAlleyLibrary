@@ -12,6 +12,7 @@ using System.Linq;
 using System.Globalization;
 using TimHanewichToolkit.TextAnalysis;
 using EarningsAlley;
+using SecuritiesExchangeCommission.Edgar;
 
 namespace EarningsAlley
 {
@@ -289,7 +290,69 @@ namespace EarningsAlley
             await blb.UploadTextAsync(url);
         }
 
-        
+        /// <summary>
+        /// This will scan the newly filed Form 4's and return the ones that are new (have not been seen yet). Thus, this will mark the new ones as observed.
+        /// </summary>
+        public async Task<StatementOfChangesInBeneficialOwnership[]> ObserveNewForm4sAsync()
+        {
+            //Get the last observed filing URL
+            string LastObservedFilingUrl = await DownloadLatestObservedForm4FilingUrlAsync();
+
+            //Search!
+            EdgarLatestFilingsSearch elfs = await EdgarLatestFilingsSearch.SearchAsync("4", EdgarSearchOwnershipFilter.only, EdgarSearchResultsPerPage.Entries40);
+            
+            //Get a list of new filings
+            List<EdgarSearchResult> NewlyObservedFilings = new List<EdgarSearchResult>();
+            if (LastObservedFilingUrl != null)
+            {
+                foreach (EdgarSearchResult esr in elfs.Results)
+                {
+                    if (LastObservedFilingUrl == esr.DocumentsUrl)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        NewlyObservedFilings.Add(esr);
+                    }
+                }   
+            }
+            else //If there isn't a latest received filings url in azure, just add all of them
+            {
+                foreach (EdgarSearchResult esr in elfs.Results)
+                {
+                    NewlyObservedFilings.Add(esr);
+                }
+            }
+
+            //Get a list of statmenet of changes in beneficial ownership for each of them
+            List<StatementOfChangesInBeneficialOwnership> ToReturn = new List<StatementOfChangesInBeneficialOwnership>();
+            foreach (EdgarSearchResult esr in NewlyObservedFilings)
+            {
+                FilingDocument[] docs = await esr.GetDocumentFormatFilesAsync();
+                foreach (FilingDocument fd in docs)
+                {
+                    if (fd.DocumentName.ToLower().Contains(".xml") && fd.DocumentType == "4")
+                    {
+                        try
+                        {
+                            StatementOfChangesInBeneficialOwnership form4 = await StatementOfChangesInBeneficialOwnership.ParseXmlFromWebUrlAsync(fd.Url);
+                            ToReturn.Add(form4);
+                        }
+                        catch
+                        {
+
+                        }   
+                    }
+                }
+            }
+
+            //Log the most recent seen form 4 (it would just be the first one in the list of results)
+            await UploadLatestObservedForm4FilingUrlAsync(elfs.Results[0].DocumentsUrl);
+
+            //Return
+            return ToReturn.ToArray();
+        }
 
         #endregion
 
