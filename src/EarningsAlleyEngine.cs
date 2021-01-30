@@ -262,7 +262,6 @@ namespace EarningsAlley
             //If the container general does not exist, obviously neither does the file so return blank.
             if (ContainerGeneral.Exists() == false)
             {
-                Console.WriteLine("Container nonexist");
                 return BlankArray.ToArray();
             }
 
@@ -272,7 +271,6 @@ namespace EarningsAlley
             //If the blob does not exist return nothing
             if (blb.Exists() == false)
             {
-                Console.WriteLine("Blob nonexist");
                 return BlankArray.ToArray();
             }
 
