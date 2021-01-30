@@ -19,7 +19,7 @@ namespace EarningsAlley
     {
         //ENVIRONMENT VARIABLES HERE
         private static string RecentlyCompletedTranscriptUrlsBlockBlobName = "RecentlyCompletedTranscriptUrls";
-        private static string RecentlyObservedForm4FilingsFileName = "RecentlyBbservedForm4Filings";
+        private static string RecentlyObservedForm4FilingsFileName = "RecentlyObservedForm4Filings";
         
         //Private resources here
         private EarningsAlleyLoginPackage LoginPackage;
