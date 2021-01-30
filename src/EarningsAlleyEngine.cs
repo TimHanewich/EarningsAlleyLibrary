@@ -370,6 +370,17 @@ namespace EarningsAlley
                             Equity e = Equity.Create(form4.IssuerTradingSymbol);
                             await e.DownloadSummaryAsync();
 
+                            //Get the name to use
+                            string TraderNameToUse = form4.OwnerName;
+                            try
+                            {
+                                TraderNameToUse = Aletheia.AletheiaToolkit.NormalizeAndRearrangeForm4Name(form4.OwnerName);
+                            }
+                            catch
+                            {
+
+                            }
+
                             //Start
                             ToReturn = "*INSIDER BUY ALERT*" + Environment.NewLine;
                             ToReturn = ToReturn + form4.OwnerName;
