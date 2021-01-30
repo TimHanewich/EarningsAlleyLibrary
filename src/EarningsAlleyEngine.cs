@@ -379,6 +379,10 @@ namespace EarningsAlley
                             {
                                 ToReturn = ToReturn + ", " + form4.OwnerOfficerTitle + ", ";
                             }
+                            else
+                            {
+                                ToReturn = ToReturn + " ";
+                            }
 
                             //Continue
                             ToReturn = ToReturn + "purchased " + ndt.TransactionQuantity.Value.ToString("#,##0") + " shares of $" + form4.IssuerTradingSymbol.Trim().ToUpper();
