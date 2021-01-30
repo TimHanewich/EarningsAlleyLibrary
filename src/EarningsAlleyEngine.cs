@@ -409,7 +409,7 @@ namespace EarningsAlley
 
                             //How much they own following transaction
                             float worth = e.Summary.Price * ndt.SecuritiesOwnedFollowingTransaction;
-                            ToReturn = ToReturn + form4.OwnerName + " now owns " + ndt.SecuritiesOwnedFollowingTransaction.ToString("#,##0") + " shares worth $" + worth.ToString("#,##0") + " of $" + form4.IssuerTradingSymbol.Trim().ToUpper() + " stock.";
+                            ToReturn = ToReturn + form4.OwnerName + " now owns " + ndt.SecuritiesOwnedFollowingTransaction.ToString("#,##0") + " shares worth $" + worth.ToString("#,##0") + " of " + form4.IssuerName + " stock.";
                         }
                     }     
                 }
