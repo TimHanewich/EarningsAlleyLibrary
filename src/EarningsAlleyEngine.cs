@@ -354,6 +354,61 @@ namespace EarningsAlley
             return ToReturn.ToArray();
         }
 
+        public async Task<string> PrepareNewForm4TweetAsync(StatementOfChangesInBeneficialOwnership form4)
+        {
+            string ToReturn = null;
+
+            foreach (NonDerivativeTransaction ndt in form4.NonDerivativeTransactions)
+            {
+                if (ndt.AcquiredOrDisposed == AcquiredDisposed.Acquired) //They acquired
+                {
+                    if (ndt.TransactionCode != null) //It is indeed a transaction, not just a holding report
+                    {
+                        if (ndt.TransactionCode == TransactionType.OpenMarketOrPrivatePurchase) //Open market purchase
+                        {
+                            //Get the equity cost
+                            Equity e = Equity.Create(form4.IssuerTradingSymbol);
+                            await e.DownloadSummaryAsync();
+
+                            //Start
+                            ToReturn = "*INSIDER BUY ALERT*" + Environment.NewLine;
+                            ToReturn = ToReturn + form4.OwnerName;
+
+                            //Is there an officer title? If so, loop it in
+                            if (form4.OwnerOfficerTitle != null && form4.OwnerOfficerTitle != "")
+                            {
+                                ToReturn = ToReturn + ", " + form4.OwnerOfficerTitle + ", ";
+                            }
+
+                            //Continue
+                            ToReturn = ToReturn + "purchased " + ndt.TransactionQuantity.Value.ToString("#,##0") + " shares of $" + form4.IssuerTradingSymbol.Trim().ToUpper();
+
+                            //Was a transaction price supplied?
+                            if (ndt.TransactionPricePerSecurity.HasValue)
+                            {
+                                ToReturn = ToReturn + " at $" + ndt.TransactionPricePerSecurity.Value.ToString("#,##0.00");
+                            }
+
+                            //Add a period
+                            ToReturn = ToReturn + "." + Environment.NewLine;
+
+                            //How much they own following transaction
+                            float worth = e.Summary.Price * ndt.SecuritiesOwnedFollowingTransaction;
+                            ToReturn = ToReturn + form4.OwnerName + " now owns " + ndt.SecuritiesOwnedFollowingTransaction.ToString("#,##0") + " shares worth $" + worth.ToString("#,##0") + " of $" + form4.IssuerTradingSymbol.Trim().ToUpper() + " stock.";
+                        }
+                    }     
+                }
+            }
+        
+            //Throw an error if ToReturn is still null (the above process did not satisfy anything)
+            if (ToReturn == null)
+            {
+                throw new Exception("The Form 4 type is not supported for tweeting.");
+            }
+
+            return ToReturn;
+        }
+
         #endregion
 
     }
