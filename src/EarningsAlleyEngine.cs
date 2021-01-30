@@ -12,21 +12,22 @@ using System.Linq;
 using System.Globalization;
 using TimHanewichToolkit.TextAnalysis;
 using EarningsAlley;
+using SecuritiesExchangeCommission.Edgar;
 
 namespace EarningsAlley
 {
     public class EarningsAlleyEngine
     {
+        //ENVIRONMENT VARIABLES HERE
+        private static string RecentlyCompletedTranscriptUrlsBlockBlobName = "RecentlyCompletedTranscriptUrls";
+        private static string RecentlyObservedForm4FilingsFileName = "RecentlyObservedForm4Filings";
+        
         //Private resources here
         private EarningsAlleyLoginPackage LoginPackage;
         private CloudStorageAccount CSA;
         private CloudBlobClient CBC;
-        private CloudBlobContainer ContainerGeneral;
+        private CloudBlobContainer ContainerGeneral;        
 
-        //Settings here
-        private string RecentlyCompletedTranscriptUrlsBlockBlobName = "RecentlyCompletedTranscriptUrls";
-
-        
         public static EarningsAlleyEngine Create(EarningsAlleyLoginPackage login_package)
         {
             //Error checking
@@ -66,6 +67,8 @@ namespace EarningsAlley
             return ToReturn;
         }
     
+        #region "Transcript summary tweeting"
+
         public List<string> DownloadRecentlyCompletedTranscriptUrls()
         {
             CloudBlockBlob blob = ContainerGeneral.GetBlockBlobReference(RecentlyCompletedTranscriptUrlsBlockBlobName);
@@ -249,6 +252,179 @@ namespace EarningsAlley
 
         }
         
+        #endregion
         
+        #region "New Form 4 alert tweeting"
+
+        public async Task<string> DownloadLatestObservedForm4FilingUrlAsync()
+        {
+            //If the container general does not exist, obviously neither does the file so return blank.
+            if (ContainerGeneral.Exists() == false)
+            {
+                return null;
+            }
+
+            //Get the blob
+            CloudBlockBlob blb = ContainerGeneral.GetBlockBlobReference(RecentlyObservedForm4FilingsFileName);
+            
+            //If the blob does not exist return nothing
+            if (blb.Exists() == false)
+            {
+                return null;
+            }
+
+            string content = await blb.DownloadTextAsync();
+            return content;
+        }
+
+        public async Task UploadLatestObservedForm4FilingUrlAsync(string url)
+        {
+            //If the container does not exit, make it
+            if (ContainerGeneral == null || ContainerGeneral.Exists() == false)
+            {
+                await ContainerGeneral.CreateIfNotExistsAsync();
+            }
+
+            //Get the blob reference
+            CloudBlockBlob blb = ContainerGeneral.GetBlockBlobReference(RecentlyObservedForm4FilingsFileName);
+            await blb.UploadTextAsync(url);
+        }
+
+        /// <summary>
+        /// This will scan the newly filed Form 4's and return the ones that are new (have not been seen yet). Thus, this will mark the new ones as observed.
+        /// </summary>
+        public async Task<StatementOfChangesInBeneficialOwnership[]> ObserveNewForm4sAsync()
+        {
+            //Get the last observed filing URL
+            string LastObservedFilingUrl = await DownloadLatestObservedForm4FilingUrlAsync();
+
+            //Search!
+            EdgarLatestFilingsSearch elfs = await EdgarLatestFilingsSearch.SearchAsync("4", EdgarSearchOwnershipFilter.only, EdgarSearchResultsPerPage.Entries40);
+            
+            //Get a list of new filings
+            List<EdgarSearchResult> NewlyObservedFilings = new List<EdgarSearchResult>();
+            if (LastObservedFilingUrl != null)
+            {
+                foreach (EdgarSearchResult esr in elfs.Results)
+                {
+                    if (LastObservedFilingUrl == esr.DocumentsUrl)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        NewlyObservedFilings.Add(esr);
+                    }
+                }   
+            }
+            else //If there isn't a latest received filings url in azure, just add all of them
+            {
+                foreach (EdgarSearchResult esr in elfs.Results)
+                {
+                    NewlyObservedFilings.Add(esr);
+                }
+            }
+
+            //Get a list of statmenet of changes in beneficial ownership for each of them
+            List<StatementOfChangesInBeneficialOwnership> ToReturn = new List<StatementOfChangesInBeneficialOwnership>();
+            foreach (EdgarSearchResult esr in NewlyObservedFilings)
+            {
+                FilingDocument[] docs = await esr.GetDocumentFormatFilesAsync();
+                foreach (FilingDocument fd in docs)
+                {
+                    if (fd.DocumentName.ToLower().Contains(".xml") && fd.DocumentType == "4")
+                    {
+                        try
+                        {
+                            StatementOfChangesInBeneficialOwnership form4 = await StatementOfChangesInBeneficialOwnership.ParseXmlFromWebUrlAsync(fd.Url);
+                            ToReturn.Add(form4);
+                        }
+                        catch
+                        {
+
+                        }   
+                    }
+                }
+            }
+
+            //Log the most recent seen form 4 (it would just be the first one in the list of results)
+            await UploadLatestObservedForm4FilingUrlAsync(elfs.Results[0].DocumentsUrl);
+
+            //Return
+            return ToReturn.ToArray();
+        }
+
+        public async Task<string> PrepareNewForm4TweetAsync(StatementOfChangesInBeneficialOwnership form4)
+        {
+            string ToReturn = null;
+
+            foreach (NonDerivativeTransaction ndt in form4.NonDerivativeTransactions)
+            {
+                if (ndt.AcquiredOrDisposed == AcquiredDisposed.Acquired) //They acquired
+                {
+                    if (ndt.TransactionCode != null) //It is indeed a transaction, not just a holding report
+                    {
+                        if (ndt.TransactionCode == TransactionType.OpenMarketOrPrivatePurchase) //Open market purchase
+                        {
+                            //Get the equity cost
+                            Equity e = Equity.Create(form4.IssuerTradingSymbol);
+                            await e.DownloadSummaryAsync();
+
+                            //Get the name to use
+                            string TraderNameToUse = form4.OwnerName;
+                            try
+                            {
+                                TraderNameToUse = Aletheia.AletheiaToolkit.NormalizeAndRearrangeForm4Name(form4.OwnerName);
+                            }
+                            catch
+                            {
+
+                            }
+
+                            //Start
+                            ToReturn = "*INSIDER BUY ALERT*" + Environment.NewLine;
+                            ToReturn = ToReturn + form4.OwnerName;
+
+                            //Is there an officer title? If so, loop it in
+                            if (form4.OwnerOfficerTitle != null && form4.OwnerOfficerTitle != "")
+                            {
+                                ToReturn = ToReturn + ", " + form4.OwnerOfficerTitle + ", ";
+                            }
+                            else
+                            {
+                                ToReturn = ToReturn + " ";
+                            }
+
+                            //Continue
+                            ToReturn = ToReturn + "purchased " + ndt.TransactionQuantity.Value.ToString("#,##0") + " shares of $" + form4.IssuerTradingSymbol.Trim().ToUpper();
+
+                            //Was a transaction price supplied?
+                            if (ndt.TransactionPricePerSecurity.HasValue)
+                            {
+                                ToReturn = ToReturn + " at $" + ndt.TransactionPricePerSecurity.Value.ToString("#,##0.00");
+                            }
+
+                            //Add a period
+                            ToReturn = ToReturn + "." + Environment.NewLine;
+
+                            //How much they own following transaction
+                            float worth = e.Summary.Price * ndt.SecuritiesOwnedFollowingTransaction;
+                            ToReturn = ToReturn + form4.OwnerName + " now owns " + ndt.SecuritiesOwnedFollowingTransaction.ToString("#,##0") + " shares worth $" + worth.ToString("#,##0") + " of " + form4.IssuerName + " stock.";
+                        }
+                    }     
+                }
+            }
+        
+            //Throw an error if ToReturn is still null (the above process did not satisfy anything)
+            if (ToReturn == null)
+            {
+                throw new Exception("The Form 4 type is not supported for tweeting.");
+            }
+
+            return ToReturn;
+        }
+
+        #endregion
+
     }
 }
