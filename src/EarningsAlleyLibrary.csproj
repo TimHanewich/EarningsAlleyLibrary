@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.5" />
+    <PackageReference Include="SecuritiesExchangeCommission.Edgar" Version="3.3.0" />
     <PackageReference Include="TheMotleyFool.Transcripts" Version="4.0.0" />
     <PackageReference Include="TheMotleyFool.Transcripts.Helper" Version="4.0.0" />
     <PackageReference Include="TimHanewich.Investing" Version="3.0.0" />
