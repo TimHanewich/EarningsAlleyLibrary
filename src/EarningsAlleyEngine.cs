@@ -293,7 +293,7 @@ namespace EarningsAlley
         /// <summary>
         /// This will scan the newly filed Form 4's and return the ones that are new (have not been seen yet). Thus, this will mark the new ones as observed.
         /// </summary>
-        public async Task<StatementOfChangesInBeneficialOwnership[]> ObserveNewForm4sAsync()
+        public async Task<StatementOfBeneficialOwnership[]> ObserveNewForm4sAsync()
         {
             //Get the last observed filing URL
             string LastObservedFilingUrl = await DownloadLatestObservedForm4FilingUrlAsync();
@@ -302,10 +302,10 @@ namespace EarningsAlley
             EdgarLatestFilingsSearch elfs = await EdgarLatestFilingsSearch.SearchAsync("4", EdgarSearchOwnershipFilter.only, EdgarSearchResultsPerPage.Entries40);
             
             //Get a list of new filings
-            List<EdgarSearchResult> NewlyObservedFilings = new List<EdgarSearchResult>();
+            List<EdgarLatestFilingResult> NewlyObservedFilings = new List<EdgarLatestFilingResult>();
             if (LastObservedFilingUrl != null)
             {
-                foreach (EdgarSearchResult esr in elfs.Results)
+                foreach (EdgarLatestFilingResult esr in elfs.Results)
                 {
                     if (LastObservedFilingUrl == esr.DocumentsUrl)
                     {
@@ -319,24 +319,26 @@ namespace EarningsAlley
             }
             else //If there isn't a latest received filings url in azure, just add all of them
             {
-                foreach (EdgarSearchResult esr in elfs.Results)
+                foreach (EdgarLatestFilingResult esr in elfs.Results)
                 {
                     NewlyObservedFilings.Add(esr);
                 }
             }
 
             //Get a list of statmenet of changes in beneficial ownership for each of them
-            List<StatementOfChangesInBeneficialOwnership> ToReturn = new List<StatementOfChangesInBeneficialOwnership>();
-            foreach (EdgarSearchResult esr in NewlyObservedFilings)
+            List<StatementOfBeneficialOwnership> ToReturn = new List<StatementOfBeneficialOwnership>();
+            foreach (EdgarLatestFilingResult esr in NewlyObservedFilings)
             {
-                FilingDocument[] docs = await esr.GetDocumentFormatFilesAsync();
+                EdgarSearchResult esrt = new EdgarSearchResult();
+                esrt.DocumentsUrl = esr.DocumentsUrl; //Have to plug it into here because this is the only class has has the GetDocumentFormatFilesAsync method
+                FilingDocument[] docs = await esrt.GetDocumentFormatFilesAsync();
                 foreach (FilingDocument fd in docs)
                 {
                     if (fd.DocumentName.ToLower().Contains(".xml") && fd.DocumentType == "4")
                     {
                         try
                         {
-                            StatementOfChangesInBeneficialOwnership form4 = await StatementOfChangesInBeneficialOwnership.ParseXmlFromWebUrlAsync(fd.Url);
+                            StatementOfBeneficialOwnership form4 = await StatementOfBeneficialOwnership.ParseXmlFromWebUrlAsync(fd.Url);
                             ToReturn.Add(form4);
                         }
                         catch
@@ -354,7 +356,7 @@ namespace EarningsAlley
             return ToReturn.ToArray();
         }
 
-        public async Task<string> PrepareNewForm4TweetAsync(StatementOfChangesInBeneficialOwnership form4)
+        public async Task<string> PrepareNewForm4TweetAsync(StatementOfBeneficialOwnership form4)
         {
             string ToReturn = null;
 
