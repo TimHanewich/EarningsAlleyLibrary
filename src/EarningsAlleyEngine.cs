@@ -13,6 +13,8 @@ using System.Globalization;
 using TimHanewichToolkit.TextAnalysis;
 using EarningsAlley;
 using SecuritiesExchangeCommission.Edgar;
+using Aletheia.Service;
+using Aletheia.Service.StockData;
 
 namespace EarningsAlley
 {
@@ -180,7 +182,7 @@ namespace EarningsAlley
             return ToTweet.ToArray();
         }
 
-        public async Task<string[]> PrepareTweetsForUpcomingEarningsCallsAsync(DateTime day)
+        public async Task<string[]> PrepareTweetsForUpcomingEarningsCallsAsync(DateTime day, Guid aletheia_api_key)
         {
             List<string> ToReturn = new List<string>();
            
@@ -192,44 +194,31 @@ namespace EarningsAlley
                 ToReturn.Add("No earnings calls planned for " + day.ToShortDateString() + "! Until next time.");
                 return ToReturn.ToArray();
             }
-            Console.WriteLine("Stocks: " + stocks.Length.ToString());
             
 
-            //Get Equity summary data for only the top 25
-            List<EquitySummaryData> DataAsList = new List<EquitySummaryData>();
-            foreach (string s in stocks)
-            {
-                if (DataAsList.Count < 25)
-                {
-                    try
-                    {
-                        Equity e = Equity.Create(s);
-                        await e.DownloadSummaryAsync();
-                        DataAsList.Add(e.Summary);
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
+            //Get Equity summary data
+            AletheiaService service = new AletheiaService(aletheia_api_key);
+            StockData[] AllData = await service.GetMultipleStockDataAsync(stocks, true, false);
             
             //Rank by market cap
-            List<EquitySummaryData> Filter1 = new List<EquitySummaryData>();
+            List<StockData> DataAsList = AllData.ToList();
+            List<StockData> Filter1 = new List<StockData>();
             do
             {
-                EquitySummaryData winner = DataAsList[0];
-                foreach (EquitySummaryData esd in DataAsList)
+                StockData winner = DataAsList[0];
+                foreach (StockData esd in DataAsList)
                 {
-                    if (esd.MarketCap > winner.MarketCap)
+                    if (esd.SummaryData != null)
                     {
-                        winner = esd;
+                        if (esd.SummaryData.MarketCap > winner.SummaryData.MarketCap)
+                        {
+                            winner = esd;
+                        }
                     }
                 }
                 Filter1.Add(winner);
                 DataAsList.Remove(winner);
             } while (DataAsList.Count != 0);
-
 
 
             int t = 1;
@@ -241,9 +230,9 @@ namespace EarningsAlley
             CurrentTweet = "Upcoming earnings calls on " + day.DayOfWeek.ToString() + ", " + monthName + " " + day.Day.ToString() + " " + day.Year.ToString() + ":";
             
             //Add all
-            foreach (EquitySummaryData esd in Filter1)
+            foreach (StockData esd in Filter1)
             {
-                string MyPiece = t.ToString() + ". " + "$" + esd.StockSymbol.ToUpper().Trim() + " " + esd.Name;
+                string MyPiece = t.ToString() + ". " + "$" + esd.SummaryData.StockSymbol.ToUpper().Trim() + " " + esd.SummaryData.Name;
 
                 //Propose what it would be
                 string proposal = CurrentTweet + "\n" + MyPiece;
