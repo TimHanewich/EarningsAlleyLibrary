@@ -192,19 +192,20 @@ namespace EarningsAlley
                 ToReturn.Add("No earnings calls planned for " + day.ToShortDateString() + "! Until next time.");
                 return ToReturn.ToArray();
             }
+            Console.WriteLine("Stocks: " + stocks.Length.ToString());
             
 
             //Get Equity summary data for only the top 25
-            List<EquitySummaryData> data = new List<EquitySummaryData>();
+            List<EquitySummaryData> DataAsList = new List<EquitySummaryData>();
             foreach (string s in stocks)
             {
-                if (data.Count < 25)
+                if (DataAsList.Count < 25)
                 {
                     try
                     {
                         Equity e = Equity.Create(s);
                         await e.DownloadSummaryAsync();
-                        data.Add(e.Summary);
+                        DataAsList.Add(e.Summary);
                     }
                     catch
                     {
@@ -214,7 +215,6 @@ namespace EarningsAlley
             }
             
             //Rank by market cap
-            List<EquitySummaryData> DataAsList = data.ToList();
             List<EquitySummaryData> Filter1 = new List<EquitySummaryData>();
             do
             {
