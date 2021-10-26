@@ -198,7 +198,7 @@ namespace EarningsAlley
 
             //Get Equity summary data
             AletheiaService service = new AletheiaService(aletheia_api_key);
-            StockData[] AllData = await service.GetMultipleStockDataAsync(stocks, true, false);
+            StockData[] AllData = await service.TryGetMultipleStockDataAsync(stocks, true, false);
             
             //Rank by market cap
             List<StockData> DataAsList = AllData.ToList();
