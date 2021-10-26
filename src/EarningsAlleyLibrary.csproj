@@ -19,7 +19,7 @@
     <PackageReference Include="Aletheia" Version="0.11.0" />
     <PackageReference Include="Aletheia.Service" Version="0.3.0" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.5" />
-    <PackageReference Include="SecuritiesExchangeCommission.Edgar" Version="6.2.2" />
+    <PackageReference Include="SecuritiesExchangeCommission.Edgar" Version="6.3.1" />
     <PackageReference Include="TheMotleyFool.Transcripts" Version="4.0.0" />
     <PackageReference Include="TheMotleyFool.Transcripts.Helper" Version="4.0.0" />
     <PackageReference Include="TimHanewich.Investing" Version="3.0.0" />
