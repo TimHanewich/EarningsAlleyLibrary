@@ -24,7 +24,7 @@
     <PackageReference Include="TheMotleyFool.Transcripts.Helper" Version="4.0.0" />
     <PackageReference Include="TimHanewich.Investing" Version="3.0.0" />
     <PackageReference Include="TimHanewichToolkit" Version="2.0.0" />
-    <PackageReference Include="Yahoo.Finance" Version="3.0.0" />
+    <PackageReference Include="Yahoo.Finance" Version="4.1.2" />
   </ItemGroup>
 
   <ItemGroup>
